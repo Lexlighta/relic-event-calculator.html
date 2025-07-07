@@ -188,10 +188,16 @@
     </thead>
     <tbody id="resources">
       <tr>
-        <td><img class="icon" src="rare relic shards.png"> Rare Relic Shards</td>
+        <td><img class="icon" src="rare relic shards.png"> Rare Specific Relic Shards</td>
         <td>5</td>
         <td><input type="number" id="rareRelic" value="0" min="0" onchange="updateScore()"></td>
         <td class="score-display" id="score_rareRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="RARE UNI RELIC SHARDS.png"> Rare Universal Relic Shards</td>
+        <td>5</td>
+        <td><input type="number" id="rareUniversal" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_rareUniversal">0</td>
       </tr>
       <tr>
         <td><img class="icon" src="epic relic shards.png"> Universal Epic Relic Shards</td>
@@ -218,7 +224,7 @@
         <td class="score-display" id="score_specLegRelic">0</td>
       </tr>
       <tr>
-        <td><img class="icon" src="arcane crystal.png"> Arcane Crystal (x1)</td>
+        <td><img class="icon" src="arcane crystal.png"> Arcane Crystal (x2000)</td>
         <td>6</td>
         <td><input type="number" id="crystal" value="0" min="0" onchange="updateScore()"></td>
         <td class="score-display" id="score_crystal">0</td>
@@ -268,14 +274,15 @@
 
     function updateScore() {
       const rare = parseInt(document.getElementById("rareRelic").value || 0) * 5;
+      const rareUniversal = parseInt(document.getElementById("rareUniversal").value || 0) * 5;
       const epic = parseInt(document.getElementById("epicRelic").value || 0) * 25;
       const specEpic = parseInt(document.getElementById("specEpicRelic").value || 0) * 25;
       const leg = parseInt(document.getElementById("legRelic").value || 0) * 120;
       const specLeg = parseInt(document.getElementById("specLegRelic").value || 0) * 120;
-      const crystal = parseInt(document.getElementById("crystal").value || 0) * 12;
-     const magic = Math.floor(parseInt(document.getElementById("magic").value || 0) / 2000) * 6;
+      const crystal = Math.floor(parseInt(document.getElementById("crystal").value || 0) / 2000) * 6;
+      const magic = Math.floor(parseInt(document.getElementById("magic").value || 0) / 2000) * 6;
 
-      const total = rare + epic + specEpic + leg + specLeg + crystal + magic;
+      const total = rare + rareUniversal + epic + specEpic + leg + specLeg + crystal + magic;
 
       // Calcul de la barre de progression AVANT l'affichage (objectif 15,000)
       const percentage = (total / 15000 * 100);
@@ -293,6 +300,7 @@
 
       // Affichage avec virgules
       document.getElementById("score_rareRelic").textContent = rare.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_rareUniversal").textContent = rareUniversal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       document.getElementById("score_epicRelic").textContent = epic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       document.getElementById("score_specEpicRelic").textContent = specEpic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       document.getElementById("score_legRelic").textContent = leg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -446,6 +454,7 @@
     function saveToLocalStorage() {
       const data = {
         rareRelic: document.getElementById("rareRelic").value,
+        rareUniversal: document.getElementById("rareUniversal").value,
         epicRelic: document.getElementById("epicRelic").value,
         specEpicRelic: document.getElementById("specEpicRelic").value,
         legRelic: document.getElementById("legRelic").value,
@@ -462,6 +471,7 @@
       if (data) {
         const parsed = JSON.parse(data);
         document.getElementById("rareRelic").value = parsed.rareRelic || 0;
+        document.getElementById("rareUniversal").value = parsed.rareUniversal || 0;
         document.getElementById("epicRelic").value = parsed.epicRelic || 0;
         document.getElementById("specEpicRelic").value = parsed.specEpicRelic || 0;
         document.getElementById("legRelic").value = parsed.legRelic || 0;
