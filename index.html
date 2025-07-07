@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top Heroes Relic Event</title>
+  <style>
+    body {
+      background-color: #1a172b;
+      color: #ffd449;
+      font-family: 'Arial Rounded MT Bold', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin: 1.5rem 0;
+    }
+    table {
+      margin: 1rem auto;
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 900px;
+      background-color: #2a2740;
+      color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    th, td {
+      padding: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    th {
+      background-color: #38355c;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.05);
+    }
+    input[type=number] {
+      width: 80px;
+      padding: 8px;
+      font-size: 1.1rem;
+      border: 2px solid #38355c;
+      border-radius: 5px;
+      background-color: #1a172b;
+      color: #ffd449;
+      text-align: center;
+    }
+    input[type=number]:focus {
+      outline: none;
+      border-color: #64ff64;
+    }
+    input[type=text] {
+      padding: 12px 16px;
+      font-size: 1.2rem;
+      border: 2px solid #38355c;
+      border-radius: 8px;
+      background-color: #2a2740;
+      color: #fff;
+      margin: 10px;
+      width: 200px;
+    }
+    input[type=text]:focus {
+      outline: none;
+      border-color: #64ff64;
+    }
+    .btn {
+      background-color: #64ff64;
+      border: none;
+      padding: 12px 24px;
+      margin: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 10px;
+      color: #1a172b;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+    .btn:hover {
+      background-color: #50e050;
+      transform: translateY(-2px);
+    }
+    .btn:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .progress {
+      background-color: #333;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      margin: 1rem auto;
+      height: 30px;
+      position: relative;
+      overflow: visible;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .bar {
+      background: linear-gradient(90deg, #64ff64, #32dd32);
+      height: 100%;
+      border-radius: 10px 0 0 10px;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a172b;
+      font-weight: bold;
+    }
+    .score-display {
+      color: #64ff64;
+      font-weight: bold;
+    }
+    .total-score {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #64ff64;
+      text-shadow: 0 0 10px rgba(100,255,100,0.5);
+      margin: 20px 0;
+    }
+    .error-message {
+      color: #ff6464;
+      background-color: rgba(255,100,100,0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px auto;
+      max-width: 500px;
+      display: none;
+    }
+    .success-message {
+      color: #64ff64;
+      background-color: rgba(100,255,100,0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px auto;
+      max-width: 500px;
+      display: none;
+    }
+    img.icon {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    #rankingTable {
+      margin-top: 2rem;
+      width: 60%;
+      max-width: 500px;
+    }
+    @media (max-width: 768px) {
+      table {
+        width: 95%;
+      }
+      th, td {
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      input[type=number] {
+        width: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Top Heroes - Relic Event ⚔️</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Points</th>
+        <th>Quantity</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody id="resources">
+      <tr>
+        <td><img class="icon" src="rare relic shards.png"> Rare Relic Shards</td>
+        <td>5</td>
+        <td><input type="number" id="rareRelic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_rareRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="epic relic shards.png"> Universal Epic Relic Shards</td>
+        <td>25</td>
+        <td><input type="number" id="epicRelic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_epicRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="specific epic relic shards.png"> Specific Epic Relic Shards</td>
+        <td>25</td>
+        <td><input type="number" id="specEpicRelic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_specEpicRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="leg relic shards.png"> Universal Legendary Relic Shards</td>
+        <td>120</td>
+        <td><input type="number" id="legRelic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_legRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="specific leg relic shards.png"> Specific Legendary Relic Shards</td>
+        <td>120</td>
+        <td><input type="number" id="specLegRelic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_specLegRelic">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="arcane crystal.png"> Arcane Crystal</td>
+        <td>12</td>
+        <td><input type="number" id="crystal" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_crystal">0</td>
+      </tr>
+      <tr>
+        <td><img class="icon" src="magic stone.png"> Magic Stones (x2000)</td>
+        <td>6</td>
+        <td><input type="number" id="magic" value="0" min="0" onchange="updateScore()"></td>
+        <td class="score-display" id="score_magic">0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="total-score">Total Points: <span id="total">0</span> / 40,000</div>
+  <div class="progress">
+    <div class="bar" id="progressBar" style="width: 0%">
+      <span id="progressText">0%</span>
+    </div>
+  </div>
+
+  <div class="error-message" id="errorMessage"></div>
+  <div class="success-message" id="successMessage"></div>
+
+  <form id="scoreForm" onsubmit="submitScore(event)">
+    <input type="text" id="pseudo" placeholder="Enter your username" required maxlength="20">
+    <br>
+    <button class="btn" type="submit" id="submitBtn">Submit my score</button>
+  </form>
+
+  <h2>🏆 Live Rankings</h2>
+  <table id="rankingTable">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody id="ranking">
+      <tr><td colspan="2">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    // URLs configurées - RELIC EVENT
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLPgmuF6hchCa5milSIIiQc6kjXTuELpJtssgkf6skEkkTKUiWpmUVaJyPGVXqesl2/exec";
+    const GOOGLE_SHEET_ID = "1QOnMn3gPvKP11Mj1gOFI6roOKST9LZ_4_cFBhsWqA7M";
+
+    function updateScore() {
+      const rare = parseInt(document.getElementById("rareRelic").value || 0) * 5;
+      const epic = parseInt(document.getElementById("epicRelic").value || 0) * 25;
+      const specEpic = parseInt(document.getElementById("specEpicRelic").value || 0) * 25;
+      const leg = parseInt(document.getElementById("legRelic").value || 0) * 120;
+      const specLeg = parseInt(document.getElementById("specLegRelic").value || 0) * 120;
+      const crystal = parseInt(document.getElementById("crystal").value || 0) * 12;
+      const magic = parseInt(document.getElementById("magic").value || 0) * 6;
+
+      const total = rare + epic + specEpic + leg + specLeg + crystal + magic;
+
+      // Calcul de la barre de progression AVANT l'affichage
+      const percentage = (total / 40000 * 100);
+      const maxWidth = Math.min(percentage, 200);
+      document.getElementById("progressBar").style.width = maxWidth + "%";
+      document.getElementById("progressText").textContent = Math.round(percentage) + "%";
+      
+      // Change la couleur si on dépasse 100%
+      const progressBar = document.getElementById("progressBar");
+      if (percentage > 100) {
+        progressBar.style.background = "linear-gradient(90deg, #ffd700, #ffaa00)"; // Doré
+      } else {
+        progressBar.style.background = "linear-gradient(90deg, #64ff64, #32dd32)"; // Vert
+      }
+
+      // Affichage avec virgules
+      document.getElementById("score_rareRelic").textContent = rare.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_epicRelic").textContent = epic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_specEpicRelic").textContent = specEpic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_legRelic").textContent = leg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_specLegRelic").textContent = specLeg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_crystal").textContent = crystal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("score_magic").textContent = magic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("total").textContent = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function showMessage(message, isError = false) {
+      const errorDiv = document.getElementById("errorMessage");
+      const successDiv = document.getElementById("successMessage");
+      
+      if (isError) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+        successDiv.style.display = "none";
+      } else {
+        successDiv.textContent = message;
+        successDiv.style.display = "block";
+        errorDiv.style.display = "none";
+      }
+      
+      setTimeout(() => {
+        errorDiv.style.display = "none";
+        successDiv.style.display = "none";
+      }, 5000);
+    }
+
+    async function loadRanking() {
+      try {
+        console.log("Loading rankings...");
+        
+        const res = await fetch(`https://opensheet.elk.sh/${GOOGLE_SHEET_ID}/Ranking`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        console.log("Data received:", data);
+
+        if (!Array.isArray(data)) {
+          console.error("Received data is not an array:", data);
+          return;
+        }
+
+        const validData = data.filter(row => row.Pseudo && row.Score && !isNaN(parseFloat(row.Score)));
+        validData.sort((a, b) => parseFloat(b.Score) - parseFloat(a.Score));
+
+        const table = document.getElementById("ranking");
+        table.innerHTML = "";
+
+        if (validData.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="2">No scores yet</td>`;
+          table.appendChild(tr);
+          return;
+        }
+
+        validData.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          const rank = index + 1;
+          let rankEmoji = "";
+          if (rank === 1) rankEmoji = "🥇 ";
+          else if (rank === 2) rankEmoji = "🥈 ";
+          else if (rank === 3) rankEmoji = "🥉 ";
+          
+          const displayScore = parseFloat(row.Score).toLocaleString('en-US');
+          tr.innerHTML = `<td>${rankEmoji}${row.Pseudo}</td><td>${displayScore}</td>`;
+          table.appendChild(tr);
+        });
+
+      } catch (error) {
+        console.error("Error loading rankings:", error);
+        const table = document.getElementById("ranking");
+        table.innerHTML = `<tr><td colspan="2">Loading error</td></tr>`;
+      }
+    }
+
+    async function submitScore(e) {
+      e.preventDefault();
+      
+      const scoreText = document.getElementById("total").textContent;
+      console.log("Raw score text:", scoreText);
+      const scoreNoComma = scoreText.replace(/\D/g, '');
+      console.log("Score without comma:", scoreNoComma);
+      const score = parseInt(scoreNoComma);
+      console.log("Final score:", score);
+
+      const pseudo = document.getElementById("pseudo").value.trim();
+
+      if (!pseudo) {
+        showMessage("Please enter a username!", true);
+        return;
+      }
+
+      if (score === 0) {
+        if (!confirm("Your score is 0, are you sure you want to submit?")) {
+          return;
+        }
+      }
+
+      const submitBtn = document.getElementById("submitBtn");
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+
+      try {
+        console.log("Sending score:", { pseudo, score });
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({ pseudo, score })
+        });
+
+        console.log("Response received:", response);
+
+        const result = await response.json();
+        console.log("Response content:", result);
+
+        if (result.result === "success") {
+          showMessage("✅ Score successfully submitted!");
+          document.getElementById("scoreForm").reset();
+          updateScore();
+          loadRanking();
+        } else {
+          showMessage("❌ Error: " + (result.message || "Unknown error"), true);
+        }
+
+      } catch (err) {
+        console.error("Complete error:", err);
+        showMessage("❌ Connection error. Please check your internet connection.", true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+
+    // Initialisation
+    updateScore();
+    loadRanking();
+    
+    // Recharge le classement toutes les 30 secondes
+    setInterval(loadRanking, 30000);
+
+    // Sauvegarde automatique des valeurs dans le navigateur
+    function saveToLocalStorage() {
+      const data = {
+        rareRelic: document.getElementById("rareRelic").value,
+        epicRelic: document.getElementById("epicRelic").value,
+        specEpicRelic: document.getElementById("specEpicRelic").value,
+        legRelic: document.getElementById("legRelic").value,
+        specLegRelic: document.getElementById("specLegRelic").value,
+        crystal: document.getElementById("crystal").value,
+        magic: document.getElementById("magic").value,
+        pseudo: document.getElementById("pseudo").value
+      };
+      localStorage.setItem('relicEventData', JSON.stringify(data));
+    }
+
+    function loadFromLocalStorage() {
+      const data = localStorage.getItem('relicEventData');
+      if (data) {
+        const parsed = JSON.parse(data);
+        document.getElementById("rareRelic").value = parsed.rareRelic || 0;
+        document.getElementById("epicRelic").value = parsed.epicRelic || 0;
+        document.getElementById("specEpicRelic").value = parsed.specEpicRelic || 0;
+        document.getElementById("legRelic").value = parsed.legRelic || 0;
+        document.getElementById("specLegRelic").value = parsed.specLegRelic || 0;
+        document.getElementById("crystal").value = parsed.crystal || 0;
+        document.getElementById("magic").value = parsed.magic || 0;
+        document.getElementById("pseudo").value = parsed.pseudo || '';
+        updateScore();
+      }
+    }
+
+    loadFromLocalStorage();
+
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', saveToLocalStorage);
+    });
+  </script>
+</body>
+</html>
