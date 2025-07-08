@@ -224,7 +224,7 @@
         <td class="score-display" id="score_specLegRelic">0</td>
       </tr>
       <tr>
-        <td><img class="icon" src="arcane crystal.png"> Arcane Crystal (x2000)</td>
+        <td><img class="icon" src="arcane crystal.png"> Arcane Crystal</td>
         <td>6</td>
         <td><input type="number" id="crystal" value="0" min="0" onchange="updateScore()"></td>
         <td class="score-display" id="score_crystal">0</td>
@@ -279,7 +279,7 @@
       const specEpic = parseInt(document.getElementById("specEpicRelic").value || 0) * 25;
       const leg = parseInt(document.getElementById("legRelic").value || 0) * 120;
       const specLeg = parseInt(document.getElementById("specLegRelic").value || 0) * 120;
-      const crystal = Math.floor(parseInt(document.getElementById("crystal").value || 0) / 2000) * 6;
+      const crystal = parseInt(document.getElementById("crystal").value || 0) * 6;
       const magic = Math.floor(parseInt(document.getElementById("magic").value || 0) / 2000) * 6;
 
       const total = rare + rareUniversal + epic + specEpic + leg + specLeg + crystal + magic;
